@@ -20,23 +20,23 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-IMAGE_BUTTON: Final[str] = "🖼 Изображение"
-GIF_BUTTON: Final[str] = "🎞 Гифка"
-SUPPORT_BUTTON: Final[str] = "🛠 Тех. поддержка"
+IMAGE_BUTTON: Final[str] = "😙"
+GIF_BUTTON: Final[str] = "🫳 Pat"
+SUPPORT_BUTTON: Final[str] = "🛠️ El Problemo?"
 WAITING_SUPPORT_MESSAGE: Final[int] = 1
 
-IMAGE_URL: Final[str] = "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee"
-GIF_URL: Final[str] = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdGVibG9va3BiYXJpenRiN3lldmpxenFuazkxZGlqajZkaHd5NHZlbSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/3oriO0OEd9QIDdllqo/giphy.gif"
+IMAGE_URL: Final[str] = "https://ibb.co/zVkTdN9S"
+GIF_URL: Final[str] = "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExZzlyMGlpZzI5ajh6dmsyYWQyNG5mYmV5bHJsbHJvN3I4NDZuZjJndCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/f2t9SOswHPioJgOFlP/giphy.gif"
 
 
 def build_keyboard() -> ReplyKeyboardMarkup:
-    keyboard = [[IMAGE_BUTTON, GIF_BUTTON], [SUPPORT_BUTTON]]
+    keyboard = [[IMAGE_BUTTON, GIF_BUTTON]]
     return ReplyKeyboardMarkup(keyboard=keyboard, resize_keyboard=True)
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.message.reply_text(
-        "Привет! Выберите, что хотите получить:",
+        "Шо?:",
         reply_markup=build_keyboard(),
     )
 
@@ -51,7 +51,7 @@ async def send_gif(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 async def request_support(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     await update.message.reply_text(
-        "Опишите проблему и отправьте сообщение. Для отмены используйте команду /cancel.",
+        "Шо не працює??. Або /cancel якщо все праює.",
         reply_markup=build_keyboard(),
     )
     return WAITING_SUPPORT_MESSAGE
@@ -64,31 +64,31 @@ async def forward_support_message(update: Update, context: ContextTypes.DEFAULT_
 
     if support_chat_id:
         support_message = (
-            "📩 Новый запрос в поддержку\n\n"
-            f"От: {user.full_name} (id: {user.id})\n"
+            "📩 Новий запит в підтримку\n\n"
+            f"Від: {user.full_name} (id: {user.id})\n"
             f"Чат: {update.effective_chat.id}\n\n"
-            f"Сообщение:\n{message_text}"
+            f"Повідомлення:\n{message_text}"
         )
         await context.bot.send_message(chat_id=int(support_chat_id), text=support_message)
     else:
         logger.warning("SUPPORT_CHAT_ID не задан. Запрос не был отправлен оператору.")
 
     await update.message.reply_text(
-        "Спасибо! Ваш запрос передан тех. поддержке.", reply_markup=build_keyboard()
+        "Все вирішимо (або зламаємо зовсім).", reply_markup=build_keyboard()
     )
     return ConversationHandler.END
 
 
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     await update.message.reply_text(
-        "Запрос отменён. Чем могу помочь?", reply_markup=build_keyboard()
+        "Запрос відкликано. Шо?", reply_markup=build_keyboard()
     )
     return ConversationHandler.END
 
 
 async def unknown(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.message.reply_text(
-        "Пожалуйста, используйте кнопки или команду /start.", reply_markup=build_keyboard()
+        "Юзай кнопки або команду /start пж.", reply_markup=build_keyboard()
     )
 
 
